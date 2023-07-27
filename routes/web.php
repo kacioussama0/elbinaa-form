@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Course;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,13 +15,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/inscription', function () {
-    return view('form');
+    $courses = Course::all();
+    $allPlaces = $courses->sum('max-places');
+    $is_end = (count(\App\Models\Form::all())) == $allPlaces;
+    return view('form',compact('is_end'));
 
 });
 
-Route::redirect('/','/inscription');
+Route::redirect('/','summer-university/inscription');
 
 Route::get('/home',[\App\Http\Controllers\FormController::class,'show']);
 
-Auth::routes();
+Route::delete('/home/form/destroy/{Form}',
+    [\App\Http\Controllers\FormController::class,'destroy'])->name('deleteForm');
 
+Auth::routes();

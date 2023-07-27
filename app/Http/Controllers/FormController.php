@@ -16,4 +16,12 @@ class FormController extends Controller
         $registers = Form::orderBy('course_id')->get();
         return view('home',compact('registers'));
     }
+
+    public function destroy($form){
+
+        $result = Form::find($form);
+        if($result -> delete()){
+            return redirect()->to('/home');
+        }
+    }
 }

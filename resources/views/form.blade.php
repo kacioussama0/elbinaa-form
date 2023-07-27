@@ -23,7 +23,7 @@
 </head>
 <body>
 
-    <header class="bg-white py-2  shadow">
+    <header class="bg-white py-2  shadow-sm">
         <div class="container d-flex align-items-center">
             <img src="{{asset('logo.svg')}}" alt="" style="width: 50px" class="me-3">
             <h6 class="fw-bolder m-0">المخيم الإعلامي الطبعة الثانية
@@ -34,12 +34,25 @@
     <main class="my-5 py-5">
         <div class="container pb-5">
 
+
+
+
                     <div class="card shadow-sm  bg-white rounded-4 ">
-                        <h3 class="card-header mb-3  bg-transparent  fw-bolder text-center py-3">
-                            استمارة التسجيل في ورشات المخيم الاعلامي
-                        </h3>
+                        <div class="card-header   bg-transparent   text-center py-3">
+                            <h3 class="fw-bolder mb-3">
+                                استمارة التسجيل في ورشات المخيم الاعلامي
+                            </h3>
+                            <p class="text-muted text-center">مرحبا بكم أبناء حركتنا الأعزاء، يشرفنا انضمامكم للجامعة الصيفية لحركة البناء الوطني،</p>
+                        </div>
+
                         <div class="card-body">
+                            @if($is_end)
+                                <div class="alert alert-danger">
+                                    <h3 class="display-1 text-center">التسجيلات إنتهت</h3>
+                                </div>
+                            @else
                                 <livewire:form/>
+                            @endif
                         </div>
                     </div>
             </div>

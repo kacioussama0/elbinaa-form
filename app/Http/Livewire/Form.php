@@ -18,7 +18,7 @@ class Form extends Component
     public $phone;
     public $email;
 
-    public $places = 20;
+    protected $listeners = ['checkrequa' => 'requirements'];
 
 
     protected $rules = [
@@ -36,24 +36,23 @@ class Form extends Component
 
     public function render()
     {
-        $places = $this->places;
-
-
 
         $cities = \Illuminate\Support\Facades\DB::table('algeria_cities')->distinct('wilaya_name')->orderBy('wilaya_code')->get(['wilaya_name','wilaya_code']);
         $courses = Course::all();
-        $is_end = (count(\App\Models\Form::all()) / count($courses)) == $places;
+        $allPlaces = $courses->sum('max-places');
 
 
 
-        return view('livewire.form',compact('cities','courses','places','is_end'));
+
+
+        return view('livewire.form',compact('cities','courses','allPlaces'));
     }
 
     public function submit() {
         $validated = $this->validate();
         $validated['course_id'] = $this->course;
         $course = Course::find($this->course);
-        if($this->places - count($course->forms) <= 0) {
+        if($course['max-places'] - count($course->forms) <= 0) {
             abort(401);
         }
         \App\Models\Form::create($validated);
@@ -68,5 +67,13 @@ class Form extends Component
         $this->level = '';
         $this->phone = '';
         $this->email = '';
+    }
+
+    public function requirements() {
+        if($this->course != ''){
+            $course = Course::find($this->course)->requirements;
+            return session()->flash('reqs' , $course);
+        }
+
     }
 }
